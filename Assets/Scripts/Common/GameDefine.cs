@@ -37,7 +37,7 @@ public enum MsgID
 
 public interface IState
 {
-    void Enter(int lastState);
+    void Enter(int lastState, params object[] args);
     void Update();
     void Exit(int nextState);
 

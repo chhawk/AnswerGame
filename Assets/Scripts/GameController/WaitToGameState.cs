@@ -12,7 +12,7 @@ public class WaitToGameState : IState
         }
     }
 
-    public void Enter(int lastState)
+    public void Enter(int lastState, params object[] args)
     {
         ManagerResolver.Resolve<GameController>().StartCountDown();
     }

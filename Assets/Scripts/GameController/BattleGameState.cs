@@ -17,7 +17,7 @@ public class BattleGameState : IState
         }
     }
 
-    public void Enter(int lastState)
+    public void Enter(int lastState, params object[] args)
     {
         ManagerResolver.Resolve<GameController>().TimerText.transform.parent.gameObject.SetActive(true);
         ManagerResolver.Resolve<GameController>().TimerText.text = "00:00";

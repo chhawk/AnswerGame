@@ -57,9 +57,9 @@ public class GameController : MonoBehaviour
             m_StateMachine.Update();
     }
 
-    public void ChangeState(int gs)
+    public void ChangeState(int gs, params object[] args)
     {
-        m_StateMachine.ChangeState(gs);
+        m_StateMachine.ChangeState(gs, args);
     }
 
     public void StartCountDown()
@@ -115,33 +115,9 @@ public class GameController : MonoBehaviour
                 break;
 
             case eGameState.eGameWin:
-                {
-                    QuestionUI.SetActive(false);
-                    if (GameOverUI != null && m_StateMachine.CurStateID == GameState.GS_Battle)
-                    {
-                        GameOverUI.SetActive(true);
-                        Animator anim = GameOverUI.transform.GetComponent<Animator>();
-                        anim.SetTrigger("Victory");
-
-                        ChangeState(GameState.GS_Over);
-                    }
-
-                }
-                break;
-
             case eGameState.eGameLost:
                 {
-                    QuestionUI.SetActive(false);
-
-                    if (GameOverUI != null && m_StateMachine.CurStateID == GameState.GS_Battle)
-                    {
-                        GameOverUI.SetActive(true);
-                        Animator anim = GameOverUI.transform.GetComponent<Animator>();
-                        anim.SetTrigger("Defeat");
-
-                        ChangeState(GameState.GS_Over);
-                    }
-
+                    ChangeState(GameState.GS_Over, gamestate);
                 }
                 break;
 

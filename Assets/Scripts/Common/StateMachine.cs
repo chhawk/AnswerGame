@@ -53,15 +53,15 @@ public class StateMachine
         return null;
     }
 
-    public void ChangeState(int id)
+    public void ChangeState(int id, params object[] args)
     {
         if (m_DictStates.ContainsKey(id))
         {
-            ChangeState(m_DictStates[id]);
+            ChangeState(m_DictStates[id], args);
         }
     }
 
-    public void ChangeState(IState newstate)
+    public void ChangeState(IState newstate, params object[] args)
     {
         if (newstate == null)
             return;
@@ -75,7 +75,7 @@ public class StateMachine
         if (CurState != null)
             CurState.Exit(newstate.ID);
 
-        newstate.Enter(CurStateID);
+        newstate.Enter(CurStateID, args);
 
         CurState = newstate;
     }

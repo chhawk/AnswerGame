@@ -12,8 +12,25 @@ public class OverGameState : IState
         }
     }
 
-    public void Enter(int lastState)
+    public void Enter(int lastState, params object[] args)
     {
+        eGameState gamestate = (eGameState)args[0];
+
+        if(gamestate == eGameState.eGameWin)
+        {
+            ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
+            //ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
+            //Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
+            //anim.SetTrigger("Victory");
+
+        }
+        else
+        {
+            ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
+            //ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
+            //Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
+            //anim.SetTrigger("Defeat");
+        }
     }
 
     public void Update()
