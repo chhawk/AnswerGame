@@ -7,6 +7,7 @@ public class GameManager
     static GameManager instance;
 
     byte m_AssignID = 0;
+    QuestionCfgReader m_QuestionCfg;
 
     public eGameState GameState
     {
@@ -29,6 +30,13 @@ public class GameManager
     GameManager()
     {
         GameState = eGameState.eNone;
+
+        m_QuestionCfg = new QuestionCfgReader();
+    }
+
+    public void Init()
+    {
+        m_QuestionCfg.Init();
     }
 
     public byte GetAssignID()

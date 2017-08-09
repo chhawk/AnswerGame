@@ -15,7 +15,6 @@ public class UISceneController : MonoBehaviour {
 
     void Awake()
     {
-        ManagerResolver.Register<UISceneController>(this);
     }
 
     // Use this for initialization

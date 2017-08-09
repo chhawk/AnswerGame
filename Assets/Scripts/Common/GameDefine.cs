@@ -7,6 +7,9 @@ public class GlobalSettings
 {
     //tag
 
+    //csv
+    public const string QuestionCSV = "Csv/Question";
+
     //prefabs相关
 
     // 变量 ...
@@ -22,7 +25,7 @@ public enum eGameState
 
 public class GameState
 {
-    public const int GS_Array = 1;
+    public const int GS_Wait = 1;
     public const int GS_Battle = 2;
     public const int GS_Over = 3;
 }
