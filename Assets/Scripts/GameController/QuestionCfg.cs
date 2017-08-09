@@ -16,11 +16,21 @@ public class QuestionCfgReader
 {
     static public ID_QuestionCfg QuestionCfg= new ID_QuestionCfg();
 
-    public void Init()
+    List<QuestionCfgInfo> m_CurrentList;
+    QuestionCfgInfo m_CurrntQuestion = null;
+
+    public QuestionCfgReader()
     {
         // 加载配置 ...
         LoadConfig(GlobalSettings.QuestionCSV);
     }
+
+    public void Init()
+    {
+        m_CurrentList = new List<QuestionCfgInfo>(QuestionCfg.Values);
+    }
+
+
 
     // 加载配置 ...
     public void LoadConfig(string path)
@@ -36,5 +46,23 @@ public class QuestionCfgReader
             return;
 
         QuestionCfg.Add(config.ID, config);
+    }
+
+    public QuestionCfgInfo GetRandQuestion(bool next)
+    {
+        if (m_CurrentList == null)
+            return null;
+
+        if (m_CurrentList.Count == 0)
+            return m_CurrntQuestion;
+
+        if(next || m_CurrntQuestion == null)
+        {
+            int rand = Random.Range(0, m_CurrentList.Count);
+            m_CurrntQuestion = m_CurrentList[rand];
+            m_CurrentList.Remove(m_CurrntQuestion);
+        }
+
+        return m_CurrntQuestion;
     }
 }

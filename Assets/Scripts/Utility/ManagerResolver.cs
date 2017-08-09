@@ -26,4 +26,29 @@ public static class ManagerResolver {
 
 		return TypeDictionary[typeof(T)] as T;
 	}
+
+}
+
+class Utility
+{
+    public static T[] RandomSort<T>(T[] array)
+    {
+        int len = array.Length;
+
+        System.Random rand = new System.Random();
+        System.Collections.Generic.List<int> list = new System.Collections.Generic.List<int>();
+        T[] ret = new T[len];
+        int i = 0;
+        while (list.Count < len)
+        {
+            int iter = rand.Next(0, len);
+            if (!list.Contains(iter))
+            {
+                list.Add(iter);
+                ret[i] = array[iter];
+                i++;
+            }
+        }
+        return ret;
+    }
 }

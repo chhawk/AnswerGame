@@ -6,8 +6,11 @@ public class GameManager
 {
     static GameManager instance;
 
-    byte m_AssignID = 0;
+    int m_nCurrentPlayer = -1;
+
     QuestionCfgReader m_QuestionCfg;
+
+    public List<Player> m_ListPlayer = new List<Player>();
 
     public eGameState GameState
     {
@@ -34,19 +37,37 @@ public class GameManager
         m_QuestionCfg = new QuestionCfgReader();
     }
 
-    public void Init()
+    public void Init(Player[] players)
     {
         m_QuestionCfg.Init();
+
+        bool local = true;
+        foreach (Player p in players)
+        {
+            p.IsLocal = local;
+            local = false;
+            m_ListPlayer.Add(p);
+        }
     }
 
-    public byte GetAssignID()
+    public Player GetCurPlayer(bool next = false)
     {
-        return m_AssignID++;
-    }
- 
+        if(m_nCurrentPlayer == -1)
+        {
+            m_nCurrentPlayer = Random.Range(0, m_ListPlayer.Count);
+        }
+        else if(next)
+        {
+            m_nCurrentPlayer++;
+            if (m_nCurrentPlayer >= m_ListPlayer.Count)
+                m_nCurrentPlayer = 0;
+        }
 
-    public void OnGameOver(eGameState state)
+        return m_ListPlayer[m_nCurrentPlayer];
+    }
+
+    public QuestionCfgInfo GetCurQuestion(bool next = false)
     {
-        GameState = state;
+        return m_QuestionCfg.GetRandQuestion(next);
     }
 }

@@ -32,13 +32,7 @@ public class GameState
 
 public enum MsgID
 {
-    UnitClick,
-    ScreenTap,
-    ScreenDrag,
-    LongPress,
-    SkillBallCreated,
-    SkillCast,
-    TeamDead,
+    PlayerAnswer,
 }
 
 public interface IState

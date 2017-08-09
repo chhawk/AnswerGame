@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+[System.Serializable]
+public class Player 
+{
+    public GameObject m_PlayerInfoUI;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [HideInInspector]
+    public bool IsLocal
+    {
+        get;
+        set;
+    }
+
+    int fRightRate = 90;
+
+    public void StartAnswer()
+    {
+        if (IsLocal)
+            return;
+
+        ManagerResolver.Resolve<GameController>().PlayerAnswer(2, (Random.Range(0, 100) < fRightRate));
+    }
 }

@@ -8,9 +8,11 @@ public class GameController : MonoBehaviour
 {
     StateMachine m_StateMachine;
 
-    public GameObject FrameUI;
-    public Text TimerText, ReadyGoText;
-    public GameObject QuestionUI;
+    public GameObject FrameUI, QuestionUI, GameOverUI;
+    public Text TimerText, ReadyGoText, AnswerTimeText;
+    public float AnswerTime = 5.0f;
+
+    public Player[] Players;
 
     public int State
     {
@@ -24,7 +26,7 @@ public class GameController : MonoBehaviour
     {
         ManagerResolver.Register<GameController>(this);
 
-        GameManager.Instance.Init();
+        GameManager.Instance.Init(Players);
     }
 
     // Use this for initialization
@@ -85,6 +87,67 @@ public class GameController : MonoBehaviour
 
         ReadyGoText.gameObject.SetActive(false);
         ChangeState(GameState.GS_Battle);
+    }
+
+    public void PlayerAnswer(float answerTime, bool right)
+    {
+        StartCoroutine(EnumPlayerAnswer(answerTime, right));
+    }
+
+    IEnumerator EnumPlayerAnswer(float time, bool right)
+    {
+        yield return new WaitForSeconds(time);
+
+        m_StateMachine.OnMessage(MsgID.PlayerAnswer, right);
+    }
+
+    public void GameStateCallback(eGameState gamestate)
+    {
+        Debug.Log(gamestate);
+
+        switch (gamestate)
+        {
+            case eGameState.eStartGame:
+                {
+                    if (GameOverUI != null)
+                        GameOverUI.SetActive(false);
+                }
+                break;
+
+            case eGameState.eGameWin:
+                {
+                    QuestionUI.SetActive(false);
+                    if (GameOverUI != null && m_StateMachine.CurStateID == GameState.GS_Battle)
+                    {
+                        GameOverUI.SetActive(true);
+                        Animator anim = GameOverUI.transform.GetComponent<Animator>();
+                        anim.SetTrigger("Victory");
+
+                        ChangeState(GameState.GS_Over);
+                    }
+
+                }
+                break;
+
+            case eGameState.eGameLost:
+                {
+                    QuestionUI.SetActive(false);
+
+                    if (GameOverUI != null && m_StateMachine.CurStateID == GameState.GS_Battle)
+                    {
+                        GameOverUI.SetActive(true);
+                        Animator anim = GameOverUI.transform.GetComponent<Animator>();
+                        anim.SetTrigger("Defeat");
+
+                        ChangeState(GameState.GS_Over);
+                    }
+
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 
 }
