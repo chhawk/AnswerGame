@@ -14,13 +14,13 @@ public class Player
         set;
     }
 
-    int fRightRate = 90;
+    int RightRate = 90;//90%
 
     public void StartAnswer()
     {
         if (IsLocal)
             return;
 
-        ManagerResolver.Resolve<GameController>().PlayerAnswer(2, (Random.Range(0, 100) < fRightRate));
+        ManagerResolver.Resolve<GameController>().PlayerAnswer(2, (Random.Range(0, 100) < RightRate));
     }
 }

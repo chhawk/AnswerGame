@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameManager
 {
@@ -70,4 +71,13 @@ public class GameManager
     {
         return m_QuestionCfg.GetRandQuestion(next);
     }
+
+    public void OnQuit()
+    {
+        m_nCurrentPlayer = -1;
+        m_ListPlayer.Clear();
+
+        SceneManager.LoadSceneAsync(0);
+    }
+
 }

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class OverGameState : IState
 {
+    const float OverTime = 5f;
+
+    float m_fTimer;
+
     public int ID
     {
         get
@@ -14,27 +18,39 @@ public class OverGameState : IState
 
     public void Enter(int lastState, params object[] args)
     {
-        eGameState gamestate = (eGameState)args[0];
+        GameManager.Instance.GameState = (eGameState)args[0];
 
-        if(gamestate == eGameState.eGameWin)
+        if(GameManager.Instance.GameState == eGameState.eGameWin)
         {
             ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
-            //ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
-            //Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
-            //anim.SetTrigger("Victory");
+            if(ManagerResolver.Resolve<GameController>().GameOverUI != null)
+            {
+                ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
+                Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
+                anim.SetTrigger("Victory");
+            }
 
         }
         else
         {
             ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
-            //ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
-            //Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
-            //anim.SetTrigger("Defeat");
+            if (ManagerResolver.Resolve<GameController>().GameOverUI != null)
+            {
+                ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
+                Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
+                anim.SetTrigger("Defeat");
+            }
         }
+
+        m_fTimer = Time.realtimeSinceStartup + OverTime;
     }
 
     public void Update()
     {
+        if (Time.realtimeSinceStartup > m_fTimer)
+        {
+            GameManager.Instance.OnQuit();
+        }
     }
 
     public void Exit(int nextState)

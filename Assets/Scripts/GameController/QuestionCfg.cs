@@ -28,8 +28,8 @@ public class QuestionCfgReader
     public void Init()
     {
         m_CurrentList = new List<QuestionCfgInfo>(QuestionCfg.Values);
+        m_CurrntQuestion = null;
     }
-
 
 
     // 加载配置 ...
@@ -53,8 +53,8 @@ public class QuestionCfgReader
         if (m_CurrentList == null)
             return null;
 
-        if (m_CurrentList.Count == 0)
-            return m_CurrntQuestion;
+        if (m_CurrentList.Count == 0 && next)
+            return null;
 
         if(next || m_CurrntQuestion == null)
         {

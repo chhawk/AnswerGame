@@ -9,6 +9,7 @@ public class UISceneController : MonoBehaviour {
 
     private GameObject m_LoadingUI;
     private GameObject m_MainMenuUI;
+    private GameObject m_QuitGameUI;
 
     public Image m_LoadingProgress;
     public Button[] m_StartLoadButton;
@@ -22,6 +23,9 @@ public class UISceneController : MonoBehaviour {
     {
         m_LoadingUI = transform.Find("Panelloading").gameObject;
         m_MainMenuUI = transform.Find("Panelmain").gameObject;
+        m_QuitGameUI = m_MainMenuUI.transform.Find("QuitGame").gameObject;
+        Button quitBtn = m_QuitGameUI.transform.GetComponentInChildren<Button>();
+        MyPointEvent.AutoAddListener(quitBtn, OnQuit, null);
 
         if (m_StartLoadButton != null)
         {
@@ -31,13 +35,28 @@ public class UISceneController : MonoBehaviour {
                     MyPointEvent.AutoAddListener(m_StartLoadButton[i], StartLoadEvent, null);
             }
         }
+
+        if (GameManager.Instance.GameState > eGameState.eStartGame)
+        {
+            ShowGameResult();
+        }
+
     }
 
     // Update is called once per frame
     void Update ()
     {
-		
-	}
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            bool isActive = m_QuitGameUI.activeSelf;
+            m_QuitGameUI.SetActive(!isActive);
+        }
+    }
+
+    void OnQuit(UIBehaviour ui, EventTriggerType eventtype, object message, byte count)
+    {
+        Application.Quit();
+    }
 
     IEnumerator LoadLevel(int index)
     {
@@ -84,4 +103,30 @@ public class UISceneController : MonoBehaviour {
         StartLoad(1);
     }
 
+    void ShowGameResult()
+    {
+        Transform tfm = m_MainMenuUI.transform.Find("Result");
+        if (tfm != null)
+        {
+            tfm.gameObject.SetActive(true);
+
+            if (GameManager.Instance.GameState == eGameState.eGameWin)
+            {
+                tfm.Find("Gamefinally").GetChild(0).gameObject.SetActive(true);
+                tfm.Find("Gamefinally").GetChild(1).gameObject.SetActive(false);
+
+                tfm = tfm.Find("Starbackground");
+                for (int i = 0; i < 2; i++)
+                {
+                    Animator ani = tfm.GetChild(i).GetComponent<Animator>();
+                    ani.SetBool("donghua", true);
+                }
+            }
+            else
+            {
+                tfm.Find("Gamefinally").GetChild(0).gameObject.SetActive(false);
+                tfm.Find("Gamefinally").GetChild(1).gameObject.SetActive(true);
+            }
+        }
+    }
 }

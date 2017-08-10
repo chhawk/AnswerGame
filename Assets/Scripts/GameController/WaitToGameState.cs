@@ -14,6 +14,17 @@ public class WaitToGameState : IState
 
     public void Enter(int lastState, params object[] args)
     {
+        if (ManagerResolver.Resolve<GameController>().FrameUI != null)
+            ManagerResolver.Resolve<GameController>().FrameUI.SetActive(false);
+        if (ManagerResolver.Resolve<GameController>().TimerText != null)
+            ManagerResolver.Resolve<GameController>().TimerText.transform.parent.gameObject.SetActive(false);
+        if (ManagerResolver.Resolve<GameController>().ReadyGoText != null)
+            ManagerResolver.Resolve<GameController>().ReadyGoText.gameObject.SetActive(false);
+        if (ManagerResolver.Resolve<GameController>().QuestionUI != null)
+            ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
+        if (ManagerResolver.Resolve<GameController>().GameOverUI != null)
+            ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(false);
+
         ManagerResolver.Resolve<GameController>().StartCountDown();
     }
 

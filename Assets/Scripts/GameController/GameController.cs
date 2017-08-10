@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -25,29 +26,21 @@ public class GameController : MonoBehaviour
     void Awake()
     {
         ManagerResolver.Register<GameController>(this);
-
-        GameManager.Instance.Init(Players);
     }
 
     // Use this for initialization
     void Start ()
     {
-        if (FrameUI != null)
-            FrameUI.SetActive(false);
-        if (TimerText != null)
-            TimerText.transform.parent.gameObject.SetActive(false);
-        if (ReadyGoText != null)
-            ReadyGoText.gameObject.SetActive(false);
-        if (QuestionUI != null)
-            QuestionUI.SetActive(false);
+        GameManager.Instance.Init(Players);
 
         m_StateMachine = new StateMachine();
         m_StateMachine.AddState(new WaitToGameState());
         m_StateMachine.AddState(new BattleGameState());
         m_StateMachine.AddState(new OverGameState());
 
-        ChangeState(GameState.GS_Wait);
+        GameManager.Instance.GameState = eGameState.eStartGame;
 
+        ChangeState(GameState.GS_Wait);
     }
 
     // Update is called once per frame
@@ -125,5 +118,4 @@ public class GameController : MonoBehaviour
                 break;
         }
     }
-
 }
