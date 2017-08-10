@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour
 {
     StateMachine m_StateMachine;
 
-    public GameObject FrameUI, QuestionUI, GameOverUI;
+    public GameObject FrameUI, QuestionUI, GameOverUI, MenuUI;
     public Text TimerText, ReadyGoText, AnswerTimeText;
     public float AnswerTime = 5.0f;
 
@@ -48,6 +48,12 @@ public class GameController : MonoBehaviour
     {
         if (m_StateMachine != null)
             m_StateMachine.Update();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            bool isActive = MenuUI.activeSelf;
+            MenuUI.SetActive(!isActive);
+        }
     }
 
     public void ChangeState(int gs, params object[] args)
@@ -117,5 +123,10 @@ public class GameController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void OnQuit()
+    {
+        GameManager.Instance.OnQuit();
     }
 }

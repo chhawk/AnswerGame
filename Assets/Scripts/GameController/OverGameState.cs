@@ -49,7 +49,7 @@ public class OverGameState : IState
     {
         if (Time.realtimeSinceStartup > m_fTimer)
         {
-            GameManager.Instance.OnQuit();
+            ManagerResolver.Resolve<GameController>().OnQuit();
         }
     }
 

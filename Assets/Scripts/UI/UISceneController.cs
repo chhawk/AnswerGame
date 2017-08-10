@@ -24,8 +24,6 @@ public class UISceneController : MonoBehaviour {
         m_LoadingUI = transform.Find("Panelloading").gameObject;
         m_MainMenuUI = transform.Find("Panelmain").gameObject;
         m_QuitGameUI = m_MainMenuUI.transform.Find("QuitGame").gameObject;
-        Button quitBtn = m_QuitGameUI.transform.GetComponentInChildren<Button>();
-        MyPointEvent.AutoAddListener(quitBtn, OnQuit, null);
 
         if (m_StartLoadButton != null)
         {
@@ -53,7 +51,7 @@ public class UISceneController : MonoBehaviour {
         }
     }
 
-    void OnQuit(UIBehaviour ui, EventTriggerType eventtype, object message, byte count)
+    public void OnQuit()
     {
         Application.Quit();
     }
