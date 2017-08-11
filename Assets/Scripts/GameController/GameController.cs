@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class ItemSetup
+{
+   public byte id;
+   public byte num;
+}
+
 
 public class GameController : MonoBehaviour
 {
@@ -14,6 +21,18 @@ public class GameController : MonoBehaviour
     public float AnswerTime = 5.0f;
 
     public Player[] Players;
+    public ItemSetup[] ItemSetup;
+
+    ItemSetup m_ReliveItem;
+    public ItemSetup ReliveItem
+    {
+        get
+        {
+            if (m_ReliveItem == null)
+                m_ReliveItem = new ItemSetup();
+            return m_ReliveItem;
+        }
+    }
 
     public int State
     {
@@ -32,6 +51,8 @@ public class GameController : MonoBehaviour
     void Start ()
     {
         GameManager.Instance.Init(Players);
+
+        ManagerResolver.Resolve<ItemGui>().OnSetupItem(ItemSetup);
 
         m_StateMachine = new StateMachine();
         m_StateMachine.AddState(new WaitToGameState());
@@ -97,7 +118,12 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
 
-        m_StateMachine.OnMessage(MsgID.PlayerAnswer, right);
+        OnMessage(MsgID.PlayerAnswer, right);
+    }
+
+    public void OnMessage(MsgID msg, params object[] args)
+    {
+        m_StateMachine.OnMessage(msg, args);
     }
 
     public void GameStateCallback(eGameState gamestate)

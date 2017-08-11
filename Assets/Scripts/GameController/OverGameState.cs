@@ -20,26 +20,13 @@ public class OverGameState : IState
     {
         GameManager.Instance.GameState = (eGameState)args[0];
 
-        if(GameManager.Instance.GameState == eGameState.eGameWin)
+        ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
+        ManagerResolver.Resolve<ItemGui>().gameObject.SetActive(false);
+        if(ManagerResolver.Resolve<GameController>().GameOverUI != null)
         {
-            ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
-            if(ManagerResolver.Resolve<GameController>().GameOverUI != null)
-            {
-                ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
-                Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
-                anim.SetTrigger("Victory");
-            }
-
-        }
-        else
-        {
-            ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(false);
-            if (ManagerResolver.Resolve<GameController>().GameOverUI != null)
-            {
-                ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
-                Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
-                anim.SetTrigger("Defeat");
-            }
+            ManagerResolver.Resolve<GameController>().GameOverUI.SetActive(true);
+            Animator anim = ManagerResolver.Resolve<GameController>().GameOverUI.transform.GetComponent<Animator>();
+            anim.SetTrigger(GameManager.Instance.GameState == eGameState.eGameWin ? "Victory" : "Defeat");
         }
 
         m_fTimer = Time.realtimeSinceStartup + OverTime;

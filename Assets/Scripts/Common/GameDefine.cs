@@ -9,6 +9,7 @@ public class GlobalSettings
 
     //csv
     public const string QuestionCSV = "Csv/Question";
+    public const string ItemCSV = "Csv/Item";
 
     //prefabs相关
 
@@ -33,6 +34,7 @@ public class GameState
 public enum MsgID
 {
     PlayerAnswer,
+    ItemUse,
 }
 
 public interface IState

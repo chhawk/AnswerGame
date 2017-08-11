@@ -12,14 +12,14 @@ public class QuestionCfgInfo
     public int RightAnswer = 0;
 }
 
-public class QuestionCfgReader
+public class QuestionCfg
 {
-    static public ID_QuestionCfg QuestionCfg= new ID_QuestionCfg();
+    static public ID_QuestionCfg QuestionDict= new ID_QuestionCfg();
 
     List<QuestionCfgInfo> m_CurrentList;
     QuestionCfgInfo m_CurrntQuestion = null;
 
-    public QuestionCfgReader()
+    public QuestionCfg()
     {
         // 加载配置 ...
         LoadConfig(GlobalSettings.QuestionCSV);
@@ -27,7 +27,7 @@ public class QuestionCfgReader
 
     public void Init()
     {
-        m_CurrentList = new List<QuestionCfgInfo>(QuestionCfg.Values);
+        m_CurrentList = new List<QuestionCfgInfo>(QuestionDict.Values);
         m_CurrntQuestion = null;
     }
 
@@ -45,7 +45,7 @@ public class QuestionCfgReader
         if (config.Question == null)
             return;
 
-        QuestionCfg.Add(config.ID, config);
+        QuestionDict.Add(config.ID, config);
     }
 
     public QuestionCfgInfo GetRandQuestion(bool next)

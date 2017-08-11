@@ -9,7 +9,8 @@ public class GameManager
 
     int m_nCurrentPlayer = -1;
 
-    QuestionCfgReader m_QuestionCfg;
+    QuestionCfg m_QuestionCfg;
+    ItemCfg m_ItemCfg;
 
     public List<Player> m_ListPlayer = new List<Player>();
 
@@ -35,12 +36,14 @@ public class GameManager
     {
         GameState = eGameState.eNone;
 
-        m_QuestionCfg = new QuestionCfgReader();
+        m_QuestionCfg = new QuestionCfg();
+        m_ItemCfg = new ItemCfg();
     }
 
     public void Init(Player[] players)
     {
         m_QuestionCfg.Init();
+        m_ItemCfg.Init();
 
         bool local = true;
         foreach (Player p in players)

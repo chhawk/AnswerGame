@@ -33,6 +33,7 @@ public class BattleGameState : IState
         ManagerResolver.Resolve<GameController>().FrameUI.SetActive(true);
         Transform ui = player.m_PlayerInfoUI.transform;
         ManagerResolver.Resolve<GameController>().FrameUI.transform.SetPositionAndRotation(ui.position, ui.rotation);
+        ManagerResolver.Resolve<ItemGui>().OnChangePlayer(player.IsLocal);
 
         QuestionCfgInfo question = GameManager.Instance.GetCurQuestion(true);
         if (question != null)
@@ -113,8 +114,25 @@ public class BattleGameState : IState
                     OnQuitDefBtnClick(null, EventTriggerType.Cancel, right ? GameManager.Instance.GetCurQuestion().RightAnswer : 4, 0);
                 }
                 break;
+
+            case MsgID.ItemUse:
+                {
+                    byte id = (byte)args[0];
+                    OnItemUsed(id);
+                }
+                break;
+
             default:
                 break;
+        }
+    }
+
+    void OnItemUsed(byte id)
+    {
+        ItemInfo info = ItemCfg.ItemDict[id];
+        if(info.m_nAddTime > 0)
+        {
+            m_fAnswerTimer += info.m_nAddTime;
         }
     }
 }
