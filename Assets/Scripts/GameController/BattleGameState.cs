@@ -42,7 +42,7 @@ public class BattleGameState : IState
             qText.text = question.Question;
 
             ManagerResolver.Resolve<GameController>().QuestionUI.SetActive(true);
-            Button[] btns = ManagerResolver.Resolve<GameController>().QuestionUI.GetComponentsInChildren<Button>();
+            Button[] btns = ManagerResolver.Resolve<GameController>().QuestionUI.GetComponentsInChildren<Button>(true);
             int[] answerId = { 0, 1, 2, 3 };
             answerId = Utility.RandomSort<int>(answerId);
             int index = 0;
@@ -154,6 +154,16 @@ public class BattleGameState : IState
             Button[] btns = ManagerResolver.Resolve<GameController>().QuestionUI.GetComponentsInChildren<Button>();
             foreach (Button btn in btns)
             {
+                if(btn.gameObject.activeSelf)
+                {
+                    int answerId = (int)MyPointEvent.GetEventMsg(btn);
+                    QuestionCfgInfo question = GameManager.Instance.GetCurQuestion();
+                    if (answerId != question.RightAnswer)
+                    {
+                        btn.gameObject.SetActive(false);
+                        break;
+                    }
+                }
             }
         }
 

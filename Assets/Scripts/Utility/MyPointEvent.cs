@@ -90,6 +90,18 @@ public class MyPointEvent : MonoBehaviour, IEventSystemHandler, IPointerEnterHan
         data.count = 0;
     }
 
+    public static object GetEventMsg(UIBehaviour ui, EventTriggerType ett = EventTriggerType.PointerClick)
+    {
+        MyPointEvent trigger = AutoGetPointEvent(ui.gameObject);
+        return trigger.GetMessage(ett);
+    }
+
+    public object GetMessage(EventTriggerType ett)
+    {
+        if (Event_Data_Dict.ContainsKey(ett))
+            return Event_Data_Dict[ett].message;
+        return null;
+    }
 
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
