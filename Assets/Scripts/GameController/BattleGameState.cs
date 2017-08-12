@@ -22,10 +22,10 @@ public class BattleGameState : IState
         ManagerResolver.Resolve<GameController>().TimerText.transform.parent.gameObject.SetActive(true);
         ManagerResolver.Resolve<GameController>().TimerText.text = "00:00";
 
-        BeginAnswer();
+        OnChangePlayer();
     }
 
-    void BeginAnswer()
+    void OnChangePlayer()
     {
         m_fAnswerTimer = ManagerResolver.Resolve<GameController>().AnswerTime;
 
@@ -48,10 +48,11 @@ public class BattleGameState : IState
             int index = 0;
             foreach (Button btn in btns)
             {
+                btn.gameObject.SetActive(true);
                 Text t = btn.transform.GetComponentInChildren<Text>();
                 t.text = question.Answers[answerId[index]];
                 btn.enabled = player.IsLocal;
-                MyPointEvent.AutoAddListener(btn, OnQuitDefBtnClick, answerId[index]);
+                MyPointEvent.AutoAddListener(btn, OnAnswerBtnClick, answerId[index]);
                 ++index;
             }
 
@@ -59,7 +60,7 @@ public class BattleGameState : IState
         }
     }
 
-    void OnQuitDefBtnClick(UIBehaviour ui, EventTriggerType eventtype, object message, byte count)
+    void OnAnswerBtnClick(UIBehaviour ui, EventTriggerType eventtype, object message, byte count)
     {
         int id = (int)message;
         QuestionCfgInfo question = GameManager.Instance.GetCurQuestion();
@@ -67,17 +68,22 @@ public class BattleGameState : IState
         {
             Debug.Log("right!!");
 
-            BeginAnswer();
+            OnChangePlayer();
         }
         else
         {
-           Player player = GameManager.Instance.GetCurPlayer();
-           Debug.LogError("wrong!! local:" + player.IsLocal);
-            if(player.IsLocal)
-                ManagerResolver.Resolve<GameController>().GameStateCallback(eGameState.eGameLost);
-            else
-                ManagerResolver.Resolve<GameController>().GameStateCallback(eGameState.eGameWin);
+            RequestEnd();
         }
+    }
+
+    void RequestEnd()
+    {
+        Player player = GameManager.Instance.GetCurPlayer();
+        Debug.LogError("wrong!! local:" + player.IsLocal);
+        if (player.IsLocal)
+            ManagerResolver.Resolve<GameController>().TryLost();
+        else
+            ManagerResolver.Resolve<GameController>().GameStateCallback(eGameState.eGameWin);
     }
 
     public void Update()
@@ -97,8 +103,7 @@ public class BattleGameState : IState
 
             if (m_fAnswerTimer <= 0.0f)
             {
-                Player player = GameManager.Instance.GetCurPlayer();
-                ManagerResolver.Resolve<GameController>().GameStateCallback(player.IsLocal ? eGameState.eGameLost : eGameState.eGameWin);
+                RequestEnd();
             }
         }
     }
@@ -114,7 +119,7 @@ public class BattleGameState : IState
             case MsgID.PlayerAnswer:
                 {
                     bool right = (bool)args[0];
-                    OnQuitDefBtnClick(null, EventTriggerType.Cancel, right ? GameManager.Instance.GetCurQuestion().RightAnswer : 4, 0);
+                    OnAnswerBtnClick(null, EventTriggerType.PointerClick, right ? GameManager.Instance.GetCurQuestion().RightAnswer : 4, 0);
                 }
                 break;
 
@@ -133,7 +138,26 @@ public class BattleGameState : IState
     void OnItemUsed(byte id)
     {
         ItemInfo info = ItemCfg.ItemDict[id];
-        if(info.m_nAddTime > 0)
+        
+        if (info.m_nRelive > 0) //复活
+        {
+            OnChangePlayer();
+        }
+
+        if (info.m_nAvoid > 0) //免答
+        {
+            OnChangePlayer();
+        }
+
+        if (info.m_nRemoveWrong > 0) //挑错
+        {
+            Button[] btns = ManagerResolver.Resolve<GameController>().QuestionUI.GetComponentsInChildren<Button>();
+            foreach (Button btn in btns)
+            {
+            }
+        }
+
+        if(info.m_nAddTime > 0) //延时
         {
             m_fAnswerTimer += info.m_nAddTime;
         }

@@ -83,7 +83,7 @@ public class ItemGui : MonoBehaviour
         }
     }
 
-    void OnItemBtnClick(UIBehaviour ui, EventTriggerType eventtype, object message, byte count)
+    public void OnItemBtnClick(UIBehaviour ui, EventTriggerType eventtype, object message, byte count)
     {
         byte index = (byte)message;
         byte itemId = m_ItemData[index].m_nId;

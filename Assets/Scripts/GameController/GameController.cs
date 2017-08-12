@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class ItemSetup
@@ -16,7 +17,7 @@ public class GameController : MonoBehaviour
 {
     StateMachine m_StateMachine;
 
-    public GameObject FrameUI, QuestionUI, GameOverUI, MenuUI, GrayBackUI;
+    public GameObject FrameUI, QuestionUI, GameOverUI, MenuUI, GrayBackUI, ReliveConfirmUI;
     public Text TimerText, ReadyGoText, AnswerTimeText;
     public float AnswerTime = 5.0f;
 
@@ -155,5 +156,27 @@ public class GameController : MonoBehaviour
     public void OnQuit()
     {
         GameManager.Instance.OnQuit();
+    }
+
+    public void TryLost()
+    {
+        if (ReliveItem.num > 0)
+        {
+            GrayBackUI.SetActive(true);
+            ReliveConfirmUI.SetActive(true);
+        }
+        else
+            GameStateCallback(eGameState.eGameLost);
+    }
+
+    public void OnReliveConfirm(bool bRelive)
+    {
+        if (bRelive)
+        {
+            ReliveItem.num--;
+            ManagerResolver.Resolve<ItemGui>().OnItemBtnClick(null, EventTriggerType.PointerClick, ReliveItem.id, 0);
+        }
+        else
+            GameStateCallback(eGameState.eGameLost); 
     }
 }
