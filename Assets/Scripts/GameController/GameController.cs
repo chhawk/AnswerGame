@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
 {
     StateMachine m_StateMachine;
 
-    public GameObject FrameUI, QuestionUI, GameOverUI, MenuUI;
+    public GameObject FrameUI, QuestionUI, GameOverUI, MenuUI, GrayBackUI;
     public Text TimerText, ReadyGoText, AnswerTimeText;
     public float AnswerTime = 5.0f;
 
@@ -72,8 +72,9 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            bool isActive = MenuUI.activeSelf;
-            MenuUI.SetActive(!isActive);
+            bool isActive = !MenuUI.activeSelf;
+            MenuUI.SetActive(isActive);
+            GrayBackUI.SetActive(isActive);
         }
     }
 

@@ -73,7 +73,10 @@ public class BattleGameState : IState
         {
            Player player = GameManager.Instance.GetCurPlayer();
            Debug.LogError("wrong!! local:" + player.IsLocal);
-           ManagerResolver.Resolve<GameController>().GameStateCallback(player.IsLocal ? eGameState.eGameLost : eGameState.eGameWin);
+            if(player.IsLocal)
+                ManagerResolver.Resolve<GameController>().GameStateCallback(eGameState.eGameLost);
+            else
+                ManagerResolver.Resolve<GameController>().GameStateCallback(eGameState.eGameWin);
         }
     }
 
