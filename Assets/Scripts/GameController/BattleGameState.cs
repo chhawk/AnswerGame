@@ -152,6 +152,7 @@ public class BattleGameState : IState
         if (info.m_nRemoveWrong > 0) //挑错
         {
             Button[] btns = ManagerResolver.Resolve<GameController>().QuestionUI.GetComponentsInChildren<Button>();
+            btns = Utility.RandomSort<Button>(btns);
             foreach (Button btn in btns)
             {
                 if(btn.gameObject.activeSelf)
